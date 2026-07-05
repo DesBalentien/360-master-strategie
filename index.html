@@ -113,8 +113,31 @@
   footer .logo span{color:var(--oranje);}
   footer p{font-size:12px;opacity:.6;margin-top:5px;}
 
+  /* Tabellen: horizontaal scrollbaar binnen hun eigen kader i.p.v. de hele pagina */
+  .tablescroll{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:8px 0 18px;}
+  .tablescroll table{margin:0;}
+  .card .tablescroll{margin:10px 0 0;}
+  /* grid-onderdelen mogen krimpen zodat tabel/grafiek binnen het scherm blijven */
+  .grid2>*{min-width:0;}
+
   @media(max-width:900px){nav.side{display:none;}.kpis{grid-template-columns:1fr 1fr;}.grid2{grid-template-columns:1fr;}.hero h1{font-size:32px;}}
-  @media print{nav.side{display:none;}.hero,.blauwblok{-webkit-print-color-adjust:exact;}}
+  @media(max-width:640px){
+    html,body{overflow-x:hidden;}
+    .wrap{padding:0 16px;}
+    .hero{padding:44px 0 38px;}
+    .hero h1{font-size:27px;}
+    .hero p{font-size:15px;}
+    section{padding:38px 0 6px;}
+    section h2{font-size:25px;}
+    .kpis{grid-template-columns:1fr 1fr;gap:10px;}
+    .kpi{padding:13px 14px;}
+    .kpi .n{font-size:21px;}
+    th,td{padding:7px 9px;}
+    /* brede tabellen scrollen binnen hun kader; smalle kaart-tabellen niet */
+    .tablescroll table{min-width:560px;}
+    .card .tablescroll table{min-width:0;width:100%;}
+  }
+  @media print{nav.side{display:none;}.hero,.blauwblok{-webkit-print-color-adjust:exact;}.tablescroll{overflow:visible;}}
 </style>
 </head>
 <body>
@@ -845,6 +868,14 @@
 </section>
 
 <script>
+// Tabellen inpakken zodat ze op mobiel horizontaal scrollen i.p.v. de hele pagina
+document.querySelectorAll('main table').forEach(t=>{
+  if(t.parentElement && t.parentElement.classList.contains('tablescroll')) return;
+  const w=document.createElement('div');
+  w.className='tablescroll';
+  t.parentNode.insertBefore(w,t);
+  w.appendChild(t);
+});
 // Checklist voortgang
 document.querySelectorAll('.chk input').forEach(cb=>{
   const k='360master_'+cb.dataset.k;
