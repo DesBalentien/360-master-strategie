@@ -1,0 +1,895 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>360! MASTER — Strategie, Analyse &amp; Actie 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@400;600;700;800&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+  :root{ --blauw:#0D3EA2; --oranje:#FB5205; --zwart:#0A0A0A; --grijs:#F4F5F7; --lijn:#E3E6ED; }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{font-family:'Open Sans',sans-serif;color:#1a1a1a;background:#fff;line-height:1.6;}
+  h1,h2,h3,h4{font-family:'League Spartan',sans-serif;line-height:1.15;}
+
+  /* LAYOUT MET SIDEBAR */
+  .layout{display:flex;min-height:100vh;}
+  nav.side{width:250px;flex-shrink:0;background:var(--zwart);color:#fff;position:sticky;top:0;height:100vh;overflow-y:auto;padding:26px 0;}
+  nav.side .logo{font-family:'League Spartan';font-weight:800;font-size:26px;padding:0 22px 14px;}
+  nav.side .logo span{color:var(--oranje);}
+  nav.side a{display:block;color:#bbb;text-decoration:none;font-size:12.5px;padding:7px 22px;border-left:3px solid transparent;}
+  nav.side a:hover{color:#fff;background:rgba(255,255,255,.05);}
+  nav.side a b{color:var(--oranje);font-family:'League Spartan';margin-right:6px;}
+  main{flex:1;min-width:0;}
+  .wrap{max-width:960px;margin:0 auto;padding:0 34px;}
+
+  /* HERO */
+  .hero{background:var(--blauw);color:#fff;padding:64px 0 54px;}
+  .hero .tag{display:inline-block;background:var(--oranje);color:#fff;font-family:'League Spartan';font-weight:700;font-size:13px;letter-spacing:2px;padding:6px 14px;border-radius:4px;margin-bottom:20px;}
+  .hero h1{font-size:46px;font-weight:800;letter-spacing:-1px;}
+  .hero h1 span{color:var(--oranje);}
+  .hero p{margin-top:12px;font-size:17px;opacity:.92;max-width:640px;}
+  .hero .meta{margin-top:22px;font-size:13px;opacity:.7;}
+
+  section{padding:54px 0 6px;border-bottom:1px solid var(--lijn);}
+  .sec-label{font-family:'League Spartan';font-weight:700;font-size:13px;letter-spacing:2.5px;color:var(--oranje);text-transform:uppercase;}
+  section h2{font-size:31px;font-weight:800;color:var(--blauw);margin:6px 0 18px;}
+  section h3{font-size:20px;color:var(--blauw);margin:22px 0 8px;}
+  .intro{max-width:760px;color:#444;margin-bottom:20px;font-size:14.5px;}
+
+  table{width:100%;border-collapse:collapse;font-size:13px;margin:8px 0 18px;}
+  th{background:var(--blauw);color:#fff;font-family:'League Spartan';font-weight:700;font-size:12px;letter-spacing:.8px;text-align:left;padding:9px 12px;}
+  td{padding:8px 12px;border-bottom:1px solid var(--lijn);vertical-align:top;}
+  tr:nth-child(even) td{background:var(--grijs);}
+  .oranje{color:var(--oranje);font-weight:700;}
+  .b{font-weight:700;}
+  .tot td{background:var(--blauw)!important;color:#fff;font-family:'League Spartan';font-weight:700;}
+
+  .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:14px 0 22px;}
+  .kpi{background:#fff;border:1px solid var(--lijn);border-radius:12px;padding:16px 18px;box-shadow:0 4px 14px rgba(13,62,162,.07);}
+  .kpi .n{font-family:'League Spartan';font-weight:800;font-size:24px;color:var(--blauw);}
+  .kpi .n.o{color:var(--oranje);}
+  .kpi .l{font-size:11.5px;color:#555;margin-top:2px;}
+
+  .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:16px;margin:6px 0 20px;}
+  .card{border:1px solid var(--lijn);border-radius:14px;padding:20px 22px;background:#fff;}
+  .card.hl{border-top:5px solid var(--oranje);}
+  .card h3,.card h4{color:var(--blauw);font-size:17px;margin:0 0 4px;}
+  .card .prijs{font-family:'League Spartan';font-weight:800;font-size:24px;color:var(--oranje);margin:4px 0;}
+  .card .prijs small{font-size:12px;color:#777;font-family:'Open Sans';font-weight:400;}
+  .card ul{list-style:none;margin-top:8px;}
+  .card ul li{font-size:12.5px;padding:4px 0 4px 20px;position:relative;color:#333;}
+  .card ul li:before{content:'✓';position:absolute;left:0;color:var(--oranje);font-weight:700;}
+
+  .note{background:#FFF3ED;border-left:4px solid var(--oranje);border-radius:0 10px 10px 0;padding:14px 18px;font-size:13.5px;margin:14px 0;}
+  .note .t{font-family:'League Spartan';font-weight:700;color:var(--oranje);font-size:12px;letter-spacing:1px;}
+  .blauwblok{background:var(--blauw);color:#fff;border-radius:14px;padding:22px 26px;margin:16px 0;font-size:14px;}
+  .blauwblok h3{color:#fff;margin-top:0;}
+  .blauwblok .o{color:var(--oranje);font-weight:700;}
+
+  .vraag{background:var(--grijs);border-radius:12px;padding:16px 20px;margin-bottom:10px;}
+  .vraag h4{color:var(--blauw);font-size:14.5px;margin-bottom:3px;}
+  .vraag p{font-size:12.5px;color:#444;}
+
+  .flow{border:1px solid var(--lijn);border-left:5px solid var(--blauw);border-radius:0 12px 12px 0;padding:16px 20px;margin-bottom:14px;background:#fff;}
+  .flow h4{color:var(--blauw);font-size:16px;}
+  .flow .trigger{display:inline-block;background:var(--blauw);color:#fff;font-size:10.5px;font-family:'League Spartan';font-weight:700;letter-spacing:1px;padding:3px 9px;border-radius:4px;margin:5px 0 8px;}
+  .flow ol,.flow ul{margin:4px 0 4px 18px;font-size:12.5px;color:#333;}
+  .flow li{padding:2px 0;}
+  .flow .doel{font-size:12px;color:#777;margin-top:6px;}
+  .flow .doel b{color:var(--oranje);}
+
+  .stap{display:flex;gap:12px;align-items:flex-start;padding:10px 0;border-bottom:1px solid var(--lijn);}
+  .stap .nr{flex-shrink:0;width:30px;height:30px;border-radius:50%;background:var(--oranje);color:#fff;font-family:'League Spartan';font-weight:800;font-size:14px;display:flex;align-items:center;justify-content:center;}
+  .stap h4{color:var(--blauw);font-size:14.5px;}
+  .stap p{font-size:12.5px;color:#444;}
+
+  .pijl{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:12px 0 18px;}
+  .pijl .p{background:var(--grijs);border:1px solid var(--lijn);border-radius:8px;padding:8px 14px;font-size:12.5px;font-weight:600;color:var(--blauw);}
+  .pijl .p.hot{background:var(--oranje);color:#fff;border-color:var(--oranje);}
+  .pijl .a{color:var(--oranje);font-weight:800;font-size:16px;}
+
+  .chartbox{max-width:860px;margin:8px 0 22px;}
+  .chartbox.klein{max-width:420px;}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:22px;align-items:start;}
+
+  .chk{display:flex;align-items:flex-start;gap:9px;padding:5px 0;font-size:13.5px;cursor:pointer;}
+  .chk input{margin-top:3px;accent-color:var(--oranje);width:15px;height:15px;flex-shrink:0;}
+  .chk input:checked + span{text-decoration:line-through;color:#999;}
+  .week{background:var(--grijs);border-radius:14px;padding:18px 22px;margin-bottom:14px;}
+  .week h3{margin-top:0;font-size:16px;}
+  .week h3 span{color:var(--oranje);}
+
+  .beslis{border:1px solid var(--lijn);border-radius:12px;padding:16px 20px;margin-bottom:12px;}
+  .beslis h4{color:var(--blauw);font-size:15px;margin-bottom:6px;}
+  .beslis label{display:flex;gap:8px;align-items:flex-start;font-size:13px;padding:4px 0;cursor:pointer;}
+  .beslis input{accent-color:var(--oranje);margin-top:3px;}
+  .beslis .adv{font-size:11.5px;color:var(--oranje);font-weight:700;}
+  .btn{display:inline-block;background:var(--oranje);color:#fff;font-family:'League Spartan';font-weight:700;font-size:14px;letter-spacing:1px;padding:11px 22px;border-radius:8px;border:none;cursor:pointer;margin:8px 0;}
+
+  footer{background:var(--zwart);color:#fff;text-align:center;padding:36px 20px;margin-top:50px;}
+  footer .logo{font-family:'League Spartan';font-weight:800;font-size:26px;}
+  footer .logo span{color:var(--oranje);}
+  footer p{font-size:12px;opacity:.6;margin-top:5px;}
+
+  @media(max-width:900px){nav.side{display:none;}.kpis{grid-template-columns:1fr 1fr;}.grid2{grid-template-columns:1fr;}.hero h1{font-size:32px;}}
+  @media print{nav.side{display:none;}.hero,.blauwblok{-webkit-print-color-adjust:exact;}}
+</style>
+</head>
+<body>
+<div class="layout">
+<nav class="side">
+  <div class="logo">360<span>!</span> MASTER</div>
+  <a href="#s00"><b>00</b> Leeswijzer &amp; Kern</a>
+  <a href="#s01"><b>01</b> Socials-Analyse</a>
+  <a href="#s02"><b>02</b> Competitor-Analyse</a>
+  <a href="#s03"><b>03</b> Unit Economics</a>
+  <a href="#s04"><b>04</b> Positionering</a>
+  <a href="#s05"><b>05</b> Marketing Synthese</a>
+  <a href="#s06"><b>06</b> Avatar &amp; ICP Playbook</a>
+  <a href="#s07"><b>07</b> Psychologische Deepdive</a>
+  <a href="#s08"><b>08</b> Copywriting Playbook</a>
+  <a href="#s09"><b>09</b> Messaging &amp; Angles</a>
+  <a href="#s10"><b>10</b> Funnel Flowcharts</a>
+  <a href="#s11"><b>11</b> Content Calendar</a>
+  <a href="#s12"><b>12</b> Trackers &amp; Meetplan</a>
+  <a href="#s13"><b>13</b> Strategie-Audit</a>
+  <a href="#s14"><b>14</b> Beslis-Tool</a>
+  <a href="#s15"><b>15</b> Comeback &amp; Launchplan</a>
+</nav>
+<main>
+
+<div class="hero">
+  <div class="wrap">
+    <div class="tag">HET MASTERDOCUMENT</div>
+    <h1>360!<span> Master</span> — Strategie, Analyse &amp; Actie</h1>
+    <p>Alles op één plek: 16 maanden data, 24 competitors, unit economics, positionering, ICP's, copywriting, messaging, funnels, kalender, trackers, audit, beslissingen — en het complete comeback- &amp; launchplan.</p>
+    <div class="meta">Samengesteld: 5 juli 2026 · Des Balentien · Reinvent Yourself · Vervangt géén brondocumenten — bundelt ze</div>
+  </div>
+</div>
+
+<!-- ============ 00 LEESWIJZER ============ -->
+<section id="s00">
+  <div class="wrap">
+    <div class="sec-label">00 — Leeswijzer &amp; Kern</div>
+    <h2>Waar Je Staat, In Één Oogopslag</h2>
+    <div class="kpis">
+      <div class="kpi"><div class="n">2,68M</div><div class="l">Views jan '25 – apr '26 (FB+IG)</div></div>
+      <div class="kpi"><div class="n">8.171</div><div class="l">Nieuwe volgers · 75K interacties</div></div>
+      <div class="kpi"><div class="n o">51</div><div class="l">Link clicks — hét probleem dat we fixen</div></div>
+      <div class="kpi"><div class="n o">€102.088</div><div class="l">Omzettarget sept–dec (incl. btw)</div></div>
+    </div>
+    <p class="intro"><b>De diagnose in één zin:</b> je hebt geen content-probleem maar een conversie-probleem — 2,68 miljoen views leverden 51 link clicks op (0,002%). Dit masterdocument is gebouwd om precies dát te fixen: van bewezen bereik naar een werkend verkoopsysteem.</p>
+    <div class="note">
+      <div class="t">BELANGRIJK — ÉÉN BRON VAN WAARHEID VOOR PRIJZEN</div>
+      Oudere documenten bevatten oude prijzen (PL €295/€495 ex, Business €895, Challenge €50/mnd) en oude omzetmodellen (€2M met 2.100 kopers). In dit masterdocument geldt overal de <b>definitieve offer ladder van 5 juli 2026</b>: PL €495 · B&amp;L €1.495 · 1:1 PL €1.995 · 1:1 B&amp;L €3.995 · Challenge €150 + €25/mnd · Tools €50–€100 (alles incl. btw). Waar oude cijfers als context verschijnen, staat dat erbij.
+    </div>
+    <h3>Hoe dit document werkt</h3>
+    <p class="intro">Sectie 01–02 = wat de data zegt (eigen socials + concurrentie). Sectie 03–05 = het strategisch fundament (economie, positionering, synthese). Sectie 06–09 = voor wie en met welke woorden (ICP's, psychologie, copywriting, messaging). Sectie 10–12 = de machine (funnels, kalender, meten). Sectie 13–14 = scherp blijven (audit, beslissingen). Sectie 15 = het plan dat alles samenbrengt: comeback op 2 augustus, live op 3 augustus.</p>
+  </div>
+</section>
+
+<!-- ============ 01 SOCIALS ============ -->
+<section id="s01">
+  <div class="wrap">
+    <div class="sec-label">01 — Socials-Analyse</div>
+    <h2>16 Maanden Eigen Data (jan 2025 – apr 2026)</h2>
+    <div class="kpis">
+      <div class="kpi"><div class="n">86%</div><div class="l">Van alle views komt via Facebook (2,31M)</div></div>
+      <div class="kpi"><div class="n">27x</div><div class="l">IG effectiever per view voor clicks dan FB</div></div>
+      <div class="kpi"><div class="n">2,8%</div><div class="l">Gem. engagement (2–5x boven FB-norm)</div></div>
+      <div class="kpi"><div class="n">1,2M</div><div class="l">Views in nov–dec 2025 alleen</div></div>
+    </div>
+
+    <div class="chartbox"><canvas id="viewsChart"></canvas></div>
+
+    <h3>Platform-persoonlijkheden</h3>
+    <table>
+      <tr><th>Metric</th><th>Facebook</th><th>Instagram</th><th>Conclusie</th></tr>
+      <tr><td>Views</td><td>2.308.972</td><td>373.935</td><td>FB = volume / awareness</td></tr>
+      <tr><td>Volgers erbij</td><td>7.100</td><td>1.071</td><td>FB groeit 6,6x sneller</td></tr>
+      <tr><td>Link clicks</td><td class="oranje">9</td><td class="oranje">42</td><td>IG = conversie (4,7x beter absoluut, 27x per view)</td></tr>
+      <tr><td>Piekmoment</td><td>Nov–dec (jaareinde)</td><td>September (fresh start)</td><td>Twee campagne-momenten per jaar</td></tr>
+      <tr><td>Beste dag</td><td>Vlak (concept &gt; timing)</td><td>Maandag +80% vs zondag; di hoogste eng.</td><td>Ma/di ochtend posten op IG</td></tr>
+    </table>
+
+    <h3>Top-content: wat bewezen werkt</h3>
+    <table>
+      <tr><th>#</th><th>Hook</th><th>Datum</th><th>Views</th><th>Eng%</th><th>Les</th></tr>
+      <tr><td>1</td><td>"Your reel" (grenzen stellen)</td><td>17-11-25</td><td>383.810</td><td>2,1%</td><td>Grenzen/zelfrespect = massa-thema</td></tr>
+      <tr><td>2</td><td>"Geen genade….."</td><td>20-11-25</td><td>245.002</td><td>2,6%</td><td>Confronterend statement wint</td></tr>
+      <tr><td>3</td><td>"Er komt een moment…"</td><td>26-12-25</td><td>103.148</td><td>2,4%</td><td>Reflectie rond jaarwisseling</td></tr>
+      <tr><td>9</td><td>"Zwart = KRACHT"</td><td>09-09-25</td><td>48.027</td><td class="oranje">5,4%</td><td>Culturele identiteit = hoogste engagement, wint op IG</td></tr>
+      <tr><td>—</td><td>"Yu Di Korsou"</td><td>19-11-25</td><td>29.728</td><td class="oranje">5,2%</td><td>Papiamentu = in-group signaal</td></tr>
+    </table>
+    <p class="intro">7 van de top 10 komen uit nov–dec 2025. De winnende formule: Reel 15–30 sec · emotionele hook over grenzen/kracht in de eerste 3 sec · oogcontact · hook (0–3s) → story (3–15s) → punchline (15–25s) → CTA (25–30s).</p>
+
+    <h3>Wie er kijkt</h3>
+    <table>
+      <tr><th>Dimensie</th><th>Data</th></tr>
+      <tr><td>Geslacht</td><td>62,9% vrouw · 37,1% man</td></tr>
+      <tr><td>Leeftijd</td><td>35–44 grootste groep (37%) · 91% is 25–54</td></tr>
+      <tr><td>Landen</td><td>NL 62,4% · Suriname 23,2% · Curaçao 4,8% · België 4,3% → <b>±95% Caribisch-NL(-diaspora)</b></td></tr>
+      <tr><td>Steden</td><td>Paramaribo 19,6% · Amsterdam 14,6% · Rotterdam 9,7% · Willemstad 4,5%</td></tr>
+    </table>
+
+    <div class="blauwblok">
+      <h3>De 5 lessen die het launchplan sturen</h3>
+      1. <span class="o">CTA's fixen is prioriteit #1</span> — bij 0,01% CTR (nog steeds laag) waren het al 23.000 clicks per jaar geweest. Elke post krijgt nu een concrete CTA (comment-keyword of link in bio).<br>
+      2. <span class="o">Sep + nov–dec zijn jouw seizoenen</span> — Challenge-rondes en pushmomenten liggen daar precies goed (31 aug, 30 nov).<br>
+      3. <span class="o">Culturele content maandelijks</span> — hoogste engagement, niemand anders doet het.<br>
+      4. <span class="o">FB = awareness, IG = leadgen</span> — zelfde content, ander doel per platform. TikTok = nieuw experiment.<br>
+      5. <span class="o">Offline-dip bewijst batching</span> — apr '26: −99% views. Daarom: minimaal 2 weken buffer, altijd.
+    </div>
+  </div>
+</section>
+
+<!-- ============ 02 COMPETITORS ============ -->
+<section id="s02">
+  <div class="wrap">
+    <div class="sec-label">02 — Competitor-Analyse</div>
+    <h2>24 Concurrenten, 0 In Jouw Categorie</h2>
+    <p class="intro"><b>Hoofdconclusie:</b> geen enkele van de 24 geanalyseerde spelers (12 NL, 12 internationaal) positioneert zich als "dagelijkse (spirituele) discipline" met live accountability én Caribisch-NL identiteit. Jouw uitdaging is niet verslaan maar <b>de categorie uitleggen</b>.</p>
+
+    <h3>Nederland — de relevantste spelers</h3>
+    <table>
+      <tr><th>Speler</th><th>Niche</th><th>Funnel</th><th>Prijs</th><th>Omzet/mnd (schatting)</th></tr>
+      <tr><td>De Authentieke Vrouw (Diana Arkeveld)</td><td>Mindset</td><td>Podcast 500+ afl. (400K downloads) → programma → 1:1</td><td>€795–1.500+</td><td>€15–25K</td></tr>
+      <tr><td>FEM Business Club</td><td>Business netwerk</td><td>Intake → PCM-test → intervisie max 12</td><td>€4.950/jr ex</td><td>€20–35K</td></tr>
+      <tr><td>Female Leaders Club</td><td>Netwerk €150K+ ondernemers</td><td>Referral only</td><td>€2.500/jr</td><td>€10–20K</td></tr>
+      <tr><td>She Inspires (Naoual El Mahdioui)</td><td>Mindset/manifestatie</td><td>IG → programma → groep → 1:1</td><td>n.p.</td><td>€5–12K</td></tr>
+      <tr><td>School for Womanhood</td><td>Feminine embodiment</td><td>Workshop → 9-mnd programma</td><td>€200–2.450</td><td>€8–15K</td></tr>
+    </table>
+
+    <h3>Internationaal — waar je van steelt</h3>
+    <table>
+      <tr><th>Speler</th><th>Model</th><th>Steel dit</th></tr>
+      <tr><td>Manifestation Babe (Kathrin Zenkina)</td><td>Gratis masterclass → $33 → $549 → $2.222 · $100–300K/mnd</td><td class="b">Beste email-sequences van de markt — blauwdruk voor jouw flows</td></tr>
+      <tr><td>GrowthDay (Brendon Burchard)</td><td>$49/mnd · 300K+ leden · $5M+/mnd</td><td>Dagelijks ritme als membership-product (= jouw Onderhoud €25)</td></tr>
+      <tr><td>Mindvalley</td><td>$199–499/jr · $150M+/jr</td><td>+522% signups via IG comment-automation</td></tr>
+      <tr><td>Denise Duffield-Thomas</td><td>Money Bootcamp $1.797 lifetime</td><td>Eén helder core-product, jarenlang hetzelfde</td></tr>
+      <tr><td>Mel Robbins</td><td>Gratis challenge → corporate $100K+</td><td>Gratis challenge als moederschip (= jouw model!)</td></tr>
+      <tr><td>The Manifestation Collective</td><td>£33–99/mnd, max 333 leden</td><td>Schaarste als feature — max plekken communiceren</td></tr>
+    </table>
+
+    <h3>Jouw positie (0–10, vs gemiddelde competitor)</h3>
+    <table>
+      <tr><th>Dimensie</th><th>360!</th><th>Markt</th><th>Actie</th></tr>
+      <tr><td>Unieke positionering</td><td class="oranje">10</td><td>5</td><td>Uitbuiten — categorie claimen</td></tr>
+      <tr><td>Culturele identiteit</td><td class="oranje">10</td><td>3</td><td>Grootste onbezette differentiator</td></tr>
+      <tr><td>Community-intimiteit</td><td class="oranje">10</td><td>5</td><td>07:00-accountability = bewijs</td></tr>
+      <tr><td>Content-bewijs</td><td>8</td><td>6</td><td>2,68M views = munitie</td></tr>
+      <tr><td>Schaalbaarheid</td><td class="b" style="color:#c00;">4</td><td>7</td><td>Fix: Huddle + team + SOP's (sectie 13)</td></tr>
+      <tr><td>Tech/funnel-stack</td><td class="b" style="color:#c00;">5</td><td>7</td><td>Fix: Systeme.io flows + tracking (sectie 10/12)</td></tr>
+    </table>
+
+    <div class="note">
+      <div class="t">DE 5 GEPRIORITEERDE ACTIES UIT DE COMPETITOR-ANALYSE</div>
+      1. <b>Email-nurture bouwen (URGENT)</b> — zonder flows verlies je 80%+ van deelnemers; leer van Manifestation Babe → staat nu in het launchplan (sectie 10 &amp; 15). 2. <b>Prijscommunicatie per dag</b> — "€25/mnd = €0,82 per dag". 3. <b>Cross-platform uitbreiden</b> — TikTok/LinkedIn/Shorts → zit in het contentritme. 4. <b>Community formaliseren</b> — co-facilitators, buddies, max-plekken. 5. <b>Longform autoriteit</b> — YouTube 3x/week vervult de podcast-rol.
+    </div>
+  </div>
+</section>
+
+<!-- ============ 03 UNIT ECONOMICS ============ -->
+<section id="s03">
+  <div class="wrap">
+    <div class="sec-label">03 — Unit Economics</div>
+    <h2>De Economie Achter Elke Verkoop</h2>
+    <p class="intro">Volledig herrekend op de definitieve prijzen van 5 juli 2026 (alles incl. 21% btw). Directe kosten per verkoop ±2,7% (Stripe/platform) → brutomarge ±97%.</p>
+
+    <table>
+      <tr><th>Product</th><th>Prijs incl.</th><th>Ex btw</th><th>Netto na 2,7% kosten</th><th>Max CPA (30%)</th></tr>
+      <tr><td>360! Challenge</td><td>€150</td><td>€123,97</td><td>€120,62</td><td>€45</td></tr>
+      <tr><td>Onderhoud (p/mnd)</td><td>€25</td><td>€20,66</td><td>€20,10</td><td>—</td></tr>
+      <tr><td>PL Training</td><td>€495</td><td>€409,09</td><td>€398,05</td><td>€148</td></tr>
+      <tr><td>B&amp;L Training</td><td>€1.495</td><td>€1.235,54</td><td>€1.202,18</td><td>€448</td></tr>
+      <tr><td>1:1 PL (12 wk)</td><td>€1.995</td><td>€1.648,76</td><td>€1.604,24</td><td>€598</td></tr>
+      <tr><td>1:1 B&amp;L (12 wk)</td><td>€3.995</td><td>€3.301,65</td><td>€3.212,51</td><td>€1.198</td></tr>
+      <tr><td>Tools</td><td>€50–100</td><td>€41–83</td><td>€40–80</td><td>€15–30</td></tr>
+    </table>
+
+    <h3>Klantwaarde-paden (LTV)</h3>
+    <table>
+      <tr><th>Pad</th><th>Opbouw</th><th>Waarde</th></tr>
+      <tr><td>Instapper</td><td>Tool €50 + Challenge €150 + 3 mnd onderhoud</td><td>€275</td></tr>
+      <tr><td>PL-klant</td><td>Scan €50 + PL €495 + onderhoud na gratis periode</td><td>€620–770</td></tr>
+      <tr><td>B&amp;L-klant</td><td>Scan €100 + B&amp;L €1.495 + onderhoud</td><td>€1.670–1.820</td></tr>
+      <tr><td class="b">Maximale ladder</td><td>Scan €100 + 1:1 B&amp;L €3.995 + 9 mnd onderhoud</td><td class="oranje">±€4.320</td></tr>
+    </table>
+
+    <h3>CAC &amp; gezondheid (sept–dec, 180 klanten bij minimumtargets)</h3>
+    <table>
+      <tr><th>Scenario</th><th>Kosten/mnd</th><th>CAC</th><th>Omzet per klant (blended €567)</th><th>Ratio</th></tr>
+      <tr><td>Lean (editor/tools/vaste lasten, Des' tijd niet gerekend)</td><td>€3.000</td><td>€67</td><td>€567</td><td class="oranje">8,5x — zeer gezond</td></tr>
+      <tr><td>Volledig (incl. Des' uren à €75, 15 u/wk)</td><td>€7.872</td><td>€175</td><td>€567</td><td class="oranje">3,2x — gezond (norm: ≥3x)</td></tr>
+    </table>
+    <p class="intro" style="font-size:13px;">Vuistregels: CAC onder 30% van klantwaarde houden · brutomarge digitaal ≥85% (jij zit op ±97%) · LTV:CAC ≥3x. Btw-reserve: van €102K omzet is <b>€17.718 btw</b> — apart zetten vanaf verkoop #1.</p>
+
+    <div class="note">
+      <div class="t">ADS: PAS NA ORGANISCH BEWIJS</div>
+      Conform Unit Economics v3: <b>geen betaalde ads in 2026</b>. Eerst sept–dec organisch bewijzen welke content en funnels converteren. Q1 2027: retargeting-test (budget vanaf €1.000–5.000/mnd), altijd onder de max CPA per product hierboven. De oude €2M-projectie (700 kopers per training) is een groeimodel voor later — de €102K van sectie 15 is het echte doel voor nu.
+    </div>
+
+    <div class="grid2">
+      <div class="chartbox klein"><canvas id="omzetChart"></canvas></div>
+      <div>
+        <h3>Omzettargets sept–dec</h3>
+        <table>
+          <tr><th>Product</th><th>Target</th><th>Omzet</th></tr>
+          <tr><td>Challenge</td><td>15/mnd × 4</td><td>€9.000</td></tr>
+          <tr><td>PL Training</td><td>30</td><td>€14.850</td></tr>
+          <tr><td>B&amp;L Training</td><td>30</td><td>€44.850</td></tr>
+          <tr><td>1:1 PL / 1:1 B&amp;L</td><td>5 / 5</td><td>€9.975 / €19.975</td></tr>
+          <tr><td>Tools</td><td>50</td><td>€3.438</td></tr>
+          <tr class="tot"><td colspan="2">TOTAAL incl. btw</td><td>€102.088</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 04 POSITIONERING ============ -->
+<section id="s04">
+  <div class="wrap">
+    <div class="sec-label">04 — Positionering</div>
+    <h2>Wie 360! Is — En Tegen Wat Het Vecht</h2>
+    <div class="blauwblok">
+      <h3>Het positioneringsstatement</h3>
+      <span class="o" style="font-size:19px;font-family:'League Spartan';">"Reinvent Yourself."</span><br><br>
+      360! is de <b>dagelijkse (spirituele) discipline</b> voor mensen die zichzelf en hun onderneming opnieuw uitvinden — geen coaching, geen cursus, maar onderhoud. Je ontwikkelt jezelf niet in losse stappen, maar in 360 graden.
+    </div>
+    <table>
+      <tr><th>Element</th><th>Invulling</th></tr>
+      <tr><td class="b">Categorie</td><td>Dagelijkse (spirituele) discipline — dichter bij een gebedspraktijk dan bij een cursus</td></tr>
+      <tr><td class="b">Enemy</td><td>De self-development industrie die belooft maar niet levert: 87% maakt online cursussen niet af. Content zonder aanwezigheid. Programma's die eindigen.</td></tr>
+      <tr><td class="b">Mechanisme</td><td>Herhaling → Gewoonte → Identiteit. "Onderhoud plegen." Opdagen, ademen, uitspreken — elke dag.</td></tr>
+      <tr><td class="b">Belofte</td><td>"Je wordt iemand die elke dag voor zichzelf kiest — en dat volhoudt."</td></tr>
+      <tr><td class="b">Bewijs</td><td>Des doet het zelf, live. 2,68M views. TEDx. Community die zelfstandig 07:00-sessies repliceert (Cherry) en doorgaat na afloop (Nisha, Ranangela, Laïs).</td></tr>
+      <tr><td class="b">Founder-verhaal</td><td>Na de afgewezen subsidie (feb 2026, hoofdinkomen weg) paste Des haar eigen onderhoud toe — 3 maanden offline, gedoopt op Curaçao, terug op 3 aug. "De methode is VOOR de chaos." Nooit framen als persoonlijk verlies; nooit broer Inchomar als marketing.</td></tr>
+    </table>
+
+    <div class="note">
+      <div class="t">DOELGROEPBESLUIT (31-05-2026) — DE PIVOT</div>
+      Besloten: focus op <b>mensen die ondernemen of willen starten met ondernemen</b>. Let op de spanning: je data wijst op 85%+ vrouwen (Caribisch-NL), grotendeels niet-ondernemers. De brug: ochtend-content (Personal Leadership) spreekt je bestaande publiek aan én plant het zaad "leiderschap over je leven = leiderschap over je inkomen"; avond-content (B&amp;L) bouwt het ondernemerspubliek op. Elke PL-post moet de brug naar ondernemen minstens impliciet slaan.
+    </div>
+
+    <h3>Waarom niemand dit kan kopiëren</h3>
+    <p class="intro">De combinatie is onkopieerbaar: dagelijkse live accountability (geen enkele NL-speler) + Caribisch-NL culturele identiteit (markt scoort 3/10) + founder die de methode zichtbaar op zichzelf toepast + gratis instap die een volledige ervaring is (Community + wekelijkse gratis Q&amp;A). Concurrenten verkopen kennis; 360! verkoopt aanwezigheid.</p>
+  </div>
+</section>
+
+<!-- ============ 05 SYNTHESE ============ -->
+<section id="s05">
+  <div class="wrap">
+    <div class="sec-label">05 — Marketing Strategie Synthese</div>
+    <h2>Het Strategisch Brein</h2>
+
+    <h3>8 taalpatronen van je community → messaging-regels</h3>
+    <table>
+      <tr><th>Patroon (frequentie)</th><th>Regel voor alle copy</th></tr>
+      <tr><td>"Liefde en licht" (12+)</td><td>Voelwoorden boven denkwoorden — energie verkoopt</td></tr>
+      <tr><td>"360! Onderhoud" (6+)</td><td>"Onderhoud" is hét merkwoord; vermijd "healing/therapie/zelfzorg"</td></tr>
+      <tr><td>"Dankjewel voor alles" (6+)</td><td>Des IS het product — altijd Des voor de camera, nooit stock</td></tr>
+      <tr><td>"You got this" (5+)</td><td>Eerste persoon, direct, warm — Des' stem is het merk</td></tr>
+      <tr><td>"Neem je tijd" (5+)</td><td>Anti-hustle: langzaam is het nieuwe snel</td></tr>
+      <tr><td>"Bon Dia / Lobi" (4+)</td><td>Papiamentu als in-group marker — nooit uitleggen</td></tr>
+      <tr><td>"Frequenties" (3+)</td><td>Eigen framework-taal voor energie/mindset</td></tr>
+      <tr><td>"Show up" (3+)</td><td>CTA's laagdrempelig: "kom gewoon" i.p.v. "schrijf je in"</td></tr>
+    </table>
+
+    <h3>De funnel-logica</h3>
+    <div class="pijl">
+      <div class="p">Social content (48 plaatsingen/wk)</div><div class="a">→</div>
+      <div class="p">Link in bio (Linktree + UTM)</div><div class="a">→</div>
+      <div class="p">Tool / Scan (€50–100)</div><div class="a">→</div>
+      <div class="p">Challenge €150</div><div class="a">→</div>
+      <div class="p hot">Training €495 / €1.495</div><div class="a">→</div>
+      <div class="p hot">1:1 €1.995 / €3.995</div>
+    </div>
+    <p class="intro" style="font-size:13px;">Parallel: gratis route via Discord Community → woensdag gratis Q&amp;A → Challenge. Elke betaalde stap voedt de volgende via email flows (sectie 10). Onderhoud €25/mnd is de retentiemachine onderaan.</p>
+
+    <h3>Gedragspatronen om op te sturen</h3>
+    <table>
+      <tr><th>Patroon</th><th>Implicatie</th></tr>
+      <tr><td>Activiteit piekt in dag 1–14 na instap</td><td>Push hard in week 1–2, nurture in week 3–4, win-back na 30/60/90 dagen</td></tr>
+      <tr><td>Mensen vertrekken niet — ze pauzeren ("volgende keer weer")</td><td>Win-back flows zijn goud; niemand is "verloren"</td></tr>
+      <tr><td>Identiteitsshift → ambassadeurs</td><td>Danisha, Nisha, Cherry activeren als zichtbaar bewijs &amp; co-facilitators</td></tr>
+    </table>
+
+    <h3>Fasering 2026–2027</h3>
+    <table>
+      <tr><th>Fase</th><th>Periode</th><th>Focus</th></tr>
+      <tr><td class="b">Voorbereiden</td><td>Juli</td><td>Huddle, funnels, flows, trackers, batch 1, Akoesha (actielijst sectie 15)</td></tr>
+      <tr><td class="b">Bewijzen</td><td>Aug</td><td>Comeback + testmaand: hooks/angles valideren, lijst opbouwen</td></tr>
+      <tr><td class="b">Verkopen</td><td>Sep–dec</td><td>4 Challenge-rondes, €102K target, alles organisch</td></tr>
+      <tr><td class="b">Schalen</td><td>Q1 2027+</td><td>Retargeting-ads op bewezen winnaars, team uitbreiden, 5x-model</td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- ============ 06 ICP PLAYBOOK ============ -->
+<section id="s06">
+  <div class="wrap">
+    <div class="sec-label">06 — Avatar &amp; ICP Playbook</div>
+    <h2>De Drie Gezichten Van Je Publiek</h2>
+    <p class="intro">Gebouwd op echte data: 2,68M views, community-analyse (Nisha, Ranangela, Rachida, Munira, Cherry, Danisha, Chantay) en 100+ marktreviews. <b>Sinds de pivot (31-05) is Jayda de primaire ICP voor het aanbod</b> — Reshma blijft de grootste groep in je publiek en de motor onder je bereik; Sandra is je premium 1:1-instroom.</p>
+
+    <table>
+      <tr><th></th><th>ICP 1 — Reshma "De Draagkrachtige" (55%)</th><th>ICP 2 — Jayda "De Ambitieuze Bouwer" (25%) ★ PRIMAIR</th><th>ICP 3 — Sandra "De Herontdekker" (20%)</th></tr>
+      <tr><td class="b">Kern</td><td>"Draagt alles voor iedereen — behalve zichzelf"</td><td>"Bouwt aan alles — geen fundament onder zichzelf"</td><td>"Wie ben ik nu?" na levensverandering</td></tr>
+      <tr><td class="b">Profiel</td><td>28–42 · zorg/HR/onderwijs · €28–48K · vaak alleenstaande moeder · Caribisch/Surinaams-NL</td><td>24–34 · startend ondernemer/freelancer · €20–45K wisselend · 1e/2e generatie</td><td>40–55 · management/zorg · €40–65K · gescheiden/nieuwe fase · cultureel divers</td></tr>
+      <tr><td class="b">Top-pijn</td><td>Draagt alles, niemand draagt haar; weet wat te doen maar doet het niet; "sterk zijn"-druk</td><td>Imposter syndrome; start-stop; kennis zonder fundament; eenzaam ondernemen</td><td>Identiteitsverlies; "te laat"-angst; oplossingen zonder dagelijkse structuur</td></tr>
+      <tr><td class="b">Top-verlangen</td><td>Iemand die er om 07:00 IS; structuur die past in vol leven; trots zonder schuld</td><td>Mentor die het zelf doet; PL vóór business; community van bouwers</td><td>Herontdekking mét begeleiding; diepgang zonder zweverigheid; dagelijks anker</td></tr>
+      <tr><td class="b">Triggerwoorden</td><td>onderhoud · voor jezelf kiezen · 07:00 · loslaten · elke dag</td><td>bouwen · fundament · consistent · leiderschap · business + ziel</td><td>opnieuw beginnen · wie ben ik nu · het is nooit te laat · rust · diepgang</td></tr>
+      <tr><td class="b">Route (nieuwe ladder)</td><td>Content → PL Scan €50 → PL €495 → onderhoud</td><td>Content → B&amp;L Scan €100 → B&amp;L €1.495 → 1:1 €3.995</td><td>Content → Toolkit €75 → PL €495 → 1:1 €1.995 (hoogste PL-LTV)</td></tr>
+      <tr><td class="b">Platform</td><td>FB + IG Reels (geen LinkedIn)</td><td>IG/TikTok/LinkedIn</td><td>FB/IG + YouTube longform</td></tr>
+      <tr><td class="b">Bewezen trigger-content</td><td>"Chill down. Je rent te snel." (683 likes)</td><td>"Niemand volgt je omdat je het zegt."</td><td>"Soms is het beste… verdwijnen." (265 likes)</td></tr>
+      <tr><td class="b">Koopt op</td><td>Bewijs van peers (Nisha) — niet op hype</td><td>Bewijs dat Des het zelf DOET</td><td>Diepgang + "discipline + ziel"</td></tr>
+      <tr><td class="b">Conversiepsychologie</td><td>VALIDATIE</td><td>BEWIJS</td><td>HERKENNING</td></tr>
+    </table>
+
+    <div class="note">
+      <div class="t">HOE DE PIVOT EN DE ICP'S SAMENWERKEN IN HET CONTENTRITME</div>
+      Ochtendpost (PL): spreekt Reshma + Sandra aan én bouwt bij Jayda het fundament-besef. Avondpost (B&amp;L): spreekt Jayda direct aan en nodigt Reshma/Sandra uit om ondernemerschap te verkennen. Zaterdag/zondag (I.M.P.A.C.T.): raakt alle drie op het spirituele niveau — jouw diepste differentiator.
+    </div>
+
+    <h3>De 3 controle-vragen vóór elke publicatie</h3>
+    <div class="stap"><div class="nr">1</div><div><p><b>Zou Reshma, Jayda of Sandra dit opslaan?</b> Wie precies, en waarom?</p></div></div>
+    <div class="stap"><div class="nr">2</div><div><p><b>Spreek ik de pijn aan die ze niet hardop durven zeggen?</b> (Zie de "zegt vs. denkt"-tabellen in sectie 07.)</p></div></div>
+    <div class="stap"><div class="nr">3</div><div><p><b>Herkent iemand met Caribische/multiculturele achtergrond zich hierin</b> — of is dit "white coach"-content geworden?</p></div></div>
+  </div>
+</section>
+
+<!-- ============ 07 DEEPDIVE ============ -->
+<section id="s07">
+  <div class="wrap">
+    <div class="sec-label">07 — Psychologische Deepdive</div>
+    <h2>Wie Zij Écht Zijn</h2>
+    <p class="intro">De laag onder de demografie: wat ze zeggen versus wat ze denken. Dit is waar hooks vandaan komen — je schrijft niet over hun leven, je schrijft hun binnenwereld.</p>
+
+    <div class="cards">
+      <div class="card hl">
+        <h3>Reshma Cicilia · 35 · Almere</h3>
+        <p style="font-size:12.5px;color:#666;">HR gemeente · alleenstaand, Dylan (7) &amp; Naomi (4) · €42K · Curaçao</p>
+        <p style="font-size:13px;margin-top:8px;"><b>Kernzin:</b> <span class="oranje">"Ik functioneer. Maar ik leef niet."</span></p>
+        <ul>
+          <li>Liegt bij het schoolhek ("gaat goed"), slaat jouw reel op in de trein van 08:15</li>
+          <li>Netflix i.p.v. meditatie + schuldgevoel; bidt om 22:00 met wierook</li>
+          <li>Ontdekte je via FB Suggested — liket veel, reageert zelden</li>
+          <li>Archetype: <b>De Verzorger Die Zichzelf Vergeet</b></li>
+        </ul>
+        <table style="margin-top:10px;">
+          <tr><th>Zegt</th><th>Denkt</th></tr>
+          <tr><td>"Gaat prima, gewoon druk"</td><td>"Zo moe dat ik niet eens kan huilen"</td></tr>
+          <tr><td>"Ik heb geen discipline"</td><td>"Ik heb een steun-probleem"</td></tr>
+          <tr><td>"Ik hoef geen hulp"</td><td>"Ik wil dat iemand zegt: ik zie je"</td></tr>
+        </table>
+        <p style="font-size:12.5px;"><b>Verlossende vraag:</b> "Wat als voor jezelf kiezen het meest onzelfzuchtige is dat je voor je kinderen kunt doen?" · Beste tijd: 07:00–08:00 &amp; 20:30–21:00</p>
+      </div>
+      <div class="card hl">
+        <h3>Jayda Monsanto · 28 · Rotterdam-Zuid</h3>
+        <p style="font-size:12.5px;color:#666;">Freelance social media manager · single · €32K wisselend · Surinaams-NL</p>
+        <p style="font-size:13px;margin-top:8px;"><b>Kernzin:</b> <span class="oranje">"Ik snap niet waarom ik mezelf steeds saboteer."</span></p>
+        <ul>
+          <li>Maakt content voor klanten, niet voor zichzelf; 4 cursussen gekocht, 1 afgemaakt</li>
+          <li>To-watch-lijst 200+ video's — kennis als comfort</li>
+          <li>LinkedIn-steken ("6-figure") · 23:30 racende gedachten</li>
+          <li>Archetype: <b>De Zoekende Bouwer</b> · drijfveer: bewijzen dat het anders kan</li>
+        </ul>
+        <table style="margin-top:10px;">
+          <tr><th>Zegt</th><th>Denkt</th></tr>
+          <tr><td>"Volgende maand launch ik echt"</td><td>"Dat zeg ik al 6 maanden"</td></tr>
+          <tr><td>"Ik heb een systeem nodig"</td><td>"Ik heb een zelfvertrouwen-probleem"</td></tr>
+          <tr><td>"Cursus = investering"</td><td>"Ik koop om het gevoel te hebben dat ik bezig ben"</td></tr>
+        </table>
+        <p style="font-size:12.5px;"><b>Verlossende vraag:</b> "Wat als je business pas groeit als JIJ groeit — en dat begint om 07:00?" · Wil bewijs, geen inspiratie</p>
+      </div>
+      <div class="card hl">
+        <h3>Sandra Winklaar · 48 · Haarlem</h3>
+        <p style="font-size:12.5px;color:#666;">Teamleider verpleging · gescheiden na 15 jr · Yuri (18), Kyra (16) · €52K · Arubaans-NL</p>
+        <p style="font-size:13px;margin-top:8px;"><b>Kernzin:</b> <span class="oranje">"Nu is het mijn beurt — maar ik weet niet hoe."</span></p>
+        <ul>
+          <li>Notitieboekje: "Wie word ik nu?" · IG saved-folder = geheime wensenlijst</li>
+          <li>Vond je via FB-vrouwengroepen · leest Tolle, Brown, Van der Kolk</li>
+          <li>Zus zegt "je moet sterk zijn" — ze huilt na het ophangen</li>
+          <li>Archetype: <b>De Wijze Vrouw In Wording</b> — wijsheid die nog pijn is</li>
+        </ul>
+        <table style="margin-top:10px;">
+          <tr><th>Zegt</th><th>Denkt</th></tr>
+          <tr><td>"Ik heb eindelijk rust"</td><td>"Het is te stil. Ik mis iets"</td></tr>
+          <tr><td>"Ik heb niemand nodig"</td><td>"Ik wil eerst weten wie IK ben"</td></tr>
+          <tr><td>"Ik geniet van mijn vrijheid"</td><td>"Vrijheid is eng als je niet weet wat je ermee moet"</td></tr>
+        </table>
+        <p style="font-size:12.5px;"><b>Trigger:</b> diepgang, géén confrontatie · long-form (YouTube!) · hoogste 1:1-potentie &amp; retentie (70%)</p>
+      </div>
+    </div>
+
+    <h3>Bewustzijnsniveaus per persona (0–100)</h3>
+    <table>
+      <tr><th>Dimensie</th><th>Reshma</th><th>Jayda</th><th>Sandra</th><th>Content-implicatie</th></tr>
+      <tr><td>Zelfbewustzijn</td><td>55</td><td>50</td><td class="oranje">75</td><td>Sandra kan diepere content aan; Reshma/Jayda eerst herkenning</td></tr>
+      <tr><td>Patroonherkenning</td><td>35</td><td>40</td><td>65</td><td>Patronen benoemen die zij nog niet zien = "hoe wist je dat?"-effect</td></tr>
+      <tr><td>Spiritueel</td><td>60</td><td>40</td><td>70</td><td>I.M.P.A.C.T. Service raakt Reshma &amp; Sandra direct; Jayda via resultaat</td></tr>
+      <tr><td>Financieel</td><td>45</td><td>50</td><td>65</td><td>Finance Sheet (privé) is voor alle drie relevant instapproduct</td></tr>
+      <tr><td>Lichaam</td><td class="b" style="color:#c00;">30</td><td>55</td><td>60</td><td>Fysiek onderhoud als content-thema voor Reshma</td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- ============ 08 COPYWRITING ============ -->
+<section id="s08">
+  <div class="wrap">
+    <div class="sec-label">08 — Copywriting Playbook</div>
+    <h2>De 9 Klassiekers, Gedistilleerd Voor 360!</h2>
+    <p class="intro">Vaste leidraad bij álle marketing-, sales- en contentcopy. Volledige boeken staan in 10_Kennisbank/Copywriting-Boeken.</p>
+    <table>
+      <tr><th>Bron</th><th>Kernprincipe</th><th>Toepassing op 360!</th></tr>
+      <tr><td class="b">Breakthrough Advertising (Schwartz)</td><td>Verlangen kanaliseer je, je creëert het niet. 5 awareness-niveaus bepalen je boodschap.</td><td>Koud IG/TikTok-publiek = Problem/Unaware → confronterend statement. Discord/email-lijst = Product-Aware → bewijs + zachte upgrade. Verzadigde coachingmarkt → verkoop het <b>mechanisme</b> ("360 graden onderhoud"), niet hardere claims.</td></tr>
+      <tr><td class="b">Great Leads (Masterson &amp; Forde)</td><td>De lead heeft één taak: naar de volgende zin trekken. 6 lead-types.</td><td>Des' natuurlijke kracht: <b>Proclamation + Story</b>. Koud publiek: verhaal/proclamatie. Warm (email): promise/offer-leads.</td></tr>
+      <tr><td class="b">Scientific Advertising (Hopkins)</td><td>Salesmanship in print. Data boven smaak. Specificiteit wint.</td><td>"5 dagen. 07:00 en 19:00." i.p.v. "word gedisciplineerder". Gratis Q&amp;A/Community = sample-principe. Test één variabele per keer (sectie 12).</td></tr>
+      <tr><td class="b">Reason-Why (Kennedy)</td><td>Elke claim een "omdat".</td><td>"Omdat je in 360 graden werkt — lichaam, mindset, business en relaties tegelijk." Prijslogica: "€25/mnd = €0,82 per dag."</td></tr>
+      <tr><td class="b">Ogilvy on Advertising</td><td>Headline = 80% van je geld. Eén Big Idea. Research eerst.</td><td>De tekst-overlay op je reel ÍS je headline. Big Idea = "360 graden". Lange salespages mogen — schrap saaiheid, niet lengte.</td></tr>
+      <tr><td class="b">Ads That Scale</td><td>Schaalbaar concept &gt; mooie video. Eén angle per creative. Native &gt; gepolijst.</td><td>3–4 angles per maand testen; winnende reel wordt later (2027) de retargeting-ad.</td></tr>
+      <tr><td class="b">Wundt (psychologie)</td><td>Wundt-curve: prikkeling stijgt tot een piek, daarna afkeer.</td><td>Onderbouwt jouw stijl: korte zinnen, witregels, rust. Eén krachtige prikkel per boodschap — geen caps/emoji-stapeling.</td></tr>
+    </table>
+
+    <div class="blauwblok">
+      <h3>De 360! Copy-Check — 9 vragen vóór elke publicatie</h3>
+      1. Bewustzijnsniveau van de lezer bepaald? · 2. Kanaliseer ik bestaand verlangen? · 3. Lead-type bewust gekozen? · 4. Concreet &amp; specifiek? · 5. Zit er een "omdat" in? · 6. Eerste 3 seconden / kop sterk genoeg? · 7. Eén Big Idea (360 graden)? · 8. Niet over de prikkel-piek heen? · 9. 360!-stem: direct, eerlijk, geen scheldwoorden, geen loze beloftes, CTA aanwezig?
+    </div>
+  </div>
+</section>
+
+<!-- ============ 09 MESSAGING & ANGLES ============ -->
+<section id="s09">
+  <div class="wrap">
+    <div class="sec-label">09 — Messaging &amp; Angle Systeem</div>
+    <h2>3 Pijnpunten × 16 Angles × 92 Hooks</h2>
+    <p class="intro">Principe: <b>"Mensen kopen niet op features — ze kopen op herkenning."</b> Alle messaging hangt aan drie kernpijnpunten. Per pijnpunt: angles met bewezen hooks. Volledige uitwerking (alle 92 hooks + frameworks) in 01_Strategie/360_Messaging_Angles.html.</p>
+
+    <h3>Pijnpunt 1 — "Ik draag alles voor iedereen, maar vergeet mezelf" (Reshma)</h3>
+    <table>
+      <tr><th>Angle</th><th>Beste hooks</th></tr>
+      <tr><td class="b">Onderhoud</td><td>"Je laat je auto elk jaar onderhouden. Wanneer jezelf?" · "Het heet geen zelfzorg. Het heet onderhoud. En je bent achterstallig."</td></tr>
+      <tr><td class="b">15 minuten permission</td><td>"Je hebt geen uur nodig. Je hebt 07:00 nodig."</td></tr>
+      <tr><td class="b">Generatievloek doorbreken</td><td>"Je moeder droeg alles alleen. Haar moeder ook. Bij wie stopt het?"</td></tr>
+      <tr><td class="b">Bon Dia (cultureel)</td><td>"Caribisch hart. Nederlandse hustle." — 95% scrollt door; de 5% denkt "dit is van óns"</td></tr>
+      <tr><td class="b">Niet alleen doen</td><td>"Alleen mediteren voelt als alleen sporten." · "Stel je voor dat je om 07:00 niet alleen bent."</td></tr>
+      <tr><td class="b">Spiritueel zonder kerk</td><td>"Je bidt, maar gaat niet naar de kerk. Je manifesteert, maar noemt het niet zo op werk."</td></tr>
+    </table>
+
+    <h3>Pijnpunt 2 — "Imposter syndrome + hustle zonder fundament" (Jayda) ★ primair sinds pivot</h3>
+    <table>
+      <tr><th>Angle</th><th>Beste hooks</th></tr>
+      <tr><td class="b">Anti-cursus</td><td>"Ik verkoop je geen cursus. Ik vraag je om morgen om 07:00 op te dagen." · "Stop met cursussen kopen. Begin met verschijnen."</td></tr>
+      <tr><td class="b">Kennis vs. actie</td><td>"30 zelfhulpboeken en je voelt je nog hetzelfde."</td></tr>
+      <tr><td class="b">Elke maandag opnieuw</td><td>"Je meditatie-app heeft een streak van 2 dagen. Weer. Het ligt niet aan jouw discipline — het ligt aan alleen doen."</td></tr>
+      <tr><td class="b">Van volgen naar voorgaan</td><td>"Ze begon als deelnemer. Nu maakt ze eigen content." (upsell-angle → B&amp;L/1:1)</td></tr>
+      <tr><td class="b">Structuur boven grinden</td><td>"Dat is geen business. Dat is overleving." · "Stop met grinden. Begin met bouwen."</td></tr>
+    </table>
+
+    <h3>Pijnpunt 3 — "Wie ben ik nu?" (Sandra)</h3>
+    <table>
+      <tr><th>Angle</th><th>Beste hooks</th></tr>
+      <tr><td class="b">Als je leven niet werkt (crisis)</td><td>"De methode werkt niet ondanks de chaos. De methode is vóór de chaos." (Des' eigen bewijs)</td></tr>
+      <tr><td class="b">Het is niet te laat</td><td>"48 en opnieuw beginnen is niet eng. Eng is 58 en niks veranderd."</td></tr>
+      <tr><td class="b">Echt (authenticiteit)</td><td>"Ik ging 3 maanden offline. Geen contentstrategie." · "Mijn community stuurde míj steun. Dat is het verschil."</td></tr>
+      <tr><td class="b">07:00 — elke ochtend nieuw begin</td><td>"Je ochtenden zijn leeg geworden. Om 07:00 vullen we ze." · "Je stoel staat klaar."</td></tr>
+      <tr><td class="b">Lichaam als startpunt</td><td>"Niet om af te vallen. Om weer te voelen."</td></tr>
+    </table>
+
+    <h3>4 cross-angles (werken voor iedereen)</h3>
+    <p class="intro"><b>07:00</b> ("07:00 is niet een tijdstip. Het is een keuze.") · <b>Onderhoud</b> (de universele metafoor) · <b>Echt</b> ("Dit merk predikt kwetsbaarheid niet. Het bewijst het.") · <b>Anti-cursus</b> (enemy-angle).</p>
+
+    <h3>De 9 hookformules</h3>
+    <table>
+      <tr><th>Formule</th><th>Sjabloon</th></tr>
+      <tr><td>1. Confronterende Statement</td><td>"[Wat ze denken dat goed is]. [Waarom niet]." — "Je bent niet sterk. Je bent gewend."</td></tr>
+      <tr><td>2. Curiosity Gap</td><td>Open lus die alleen de video sluit</td></tr>
+      <tr><td>3. Permission Giver</td><td>"Dinsdag 14:37 is ook een goed moment om te beginnen."</td></tr>
+      <tr><td>4. Harde Waarheid Reframe</td><td>"Je hebt geen gebrek aan [X]. Je hebt een gebrek aan [Y]." — "geen motivatie- maar een systeem-probleem"</td></tr>
+      <tr><td>5. Persoonlijk Bewijs</td><td>Des' verhaal: subsidie afgewezen, offline, doop, terug</td></tr>
+      <tr><td>6. Herkennings-trigger</td><td>"Iedereen vraagt hoe het met de kinderen gaat. Niemand vraagt hoe het met jóu gaat."</td></tr>
+      <tr><td>7. Anti-industrie</td><td>"Stop met [industrie-norm]. Begin met [360!-gedrag]."</td></tr>
+      <tr><td>8. Culturele Reframe</td><td>"In onze cultuur… Maar…" — Papiamentu strategisch</td></tr>
+      <tr><td>9. Poëtische Metafoor</td><td>"Je staat tussen twee versies van jezelf in."</td></tr>
+    </table>
+    <p class="intro" style="font-size:13px;">Combinatoriek: 9 formules × 16 angles × 3 ICP's = honderden hookvarianten. Werkwijze: kies ICP → angle → formule → schrijf in Des' taal → test 2 varianten → schaal de winnaar (proces in sectie 12).</p>
+
+    <h3>Do's &amp; Don'ts (hard)</h3>
+    <div class="grid2">
+      <div class="card"><h4>Altijd</h4><ul>
+        <li>Je/jij · herkenning vóór oplossing · 3–5 woorden per regel</li>
+        <li>"Onderhoud" i.p.v. "zelfzorg" — krachtigste merkwoord</li>
+        <li>Community-leden als bewijs (Danisha, Cherry, Nisha)</li>
+        <li>NL/EN code-switching, Papiamentu strategisch</li>
+        <li>Elke angle gekoppeld aan pijnpunt + ICP + product</li>
+      </ul></div>
+      <div class="card"><h4>Nooit</h4><ul>
+        <li>Scheldwoorden · hype-taal · loze beloftes · toxic positivity</li>
+        <li>Concurrenten bashen · passieve taal · onverklaard jargon</li>
+        <li>Offline-periode framen als "persoonlijk verlies" (het was een afgewezen subsidie)</li>
+        <li>Broer Inchomar als marketing-instrument — nooit</li>
+        <li>Kwetsbaarheid inzetten als strategie i.p.v. als waarheid</li>
+      </ul></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 10 FUNNELS ============ -->
+<section id="s10">
+  <div class="wrap">
+    <div class="sec-label">10 — Funnel Flowcharts</div>
+    <h2>Van Scroll Naar Klant — Drie Parallelle Paden</h2>
+    <p class="intro">Rode draad in elke funnel: <b>Herhaling → Gewoonte → Identiteit</b>. Eén gedeelde infrastructuur (Discord, Systeme.io, Linktree, Huddle), drie ICP-paden.</p>
+
+    <h3>Hoofdfunnel (geharmoniseerd op de nieuwe ladder)</h3>
+    <div class="pijl">
+      <div class="p">Reel/post</div><div class="a">→</div>
+      <div class="p">Comment-keyword of link in bio</div><div class="a">→</div>
+      <div class="p">Linktree (UTM)</div><div class="a">→</div>
+      <div class="p">Scan/Tool €50–100 óf gratis Discord</div><div class="a">→</div>
+      <div class="p">Email flow</div><div class="a">→</div>
+      <div class="p hot">Challenge €150 / Training</div><div class="a">→</div>
+      <div class="p hot">1:1</div><div class="a">→</div>
+      <div class="p">Onderhoud €25/mnd</div>
+    </div>
+
+    <h3>Per ICP: entry, comment-keyword, pad</h3>
+    <table>
+      <tr><th>ICP</th><th>Entry-platform</th><th>Comment-CTA</th><th>Pad</th><th>Bezwaar → antwoord</th></tr>
+      <tr><td class="b">Reshma</td><td>FB Reels primair</td><td>"Typ MEZELF"</td><td>PL Scan €50 → PL €495 → onderhoud</td><td>"Geen tijd" → "15 minuten, vóór je kinderen wakker worden"</td></tr>
+      <tr><td class="b">Jayda ★</td><td>IG/TikTok/LinkedIn</td><td>"Typ BOUWEN"</td><td>B&amp;L Scan €100 → B&amp;L €1.495 → 1:1 €3.995</td><td>"Te duur" → "1 klant erbij = ROI"</td></tr>
+      <tr><td class="b">Sandra</td><td>FB-groepen/YouTube</td><td>"Typ OPNIEUW"</td><td>Toolkit €75 → PL €495 → 1:1 €1.995</td><td>"Te laat voor mij" → "Je bent niet te oud. Je bent eindelijk klaar."</td></tr>
+    </table>
+
+    <h3>De 5 email flows (volledige uitwerking in het Launch Actieplan)</h3>
+    <div class="flow"><h4>1 · Welkom — nieuwe leads</h4><div class="trigger">TRIGGER: EMAIL ACHTERGELATEN</div><ol><li>Dag 0 welkom + Des' verhaal · Dag 2 het mechanisme · Dag 4 mini-les · Dag 7 gratis Q&amp;A + Scan-wijzer</li></ol><div class="doel">Doel: <b>lead → scan-koper/Q&amp;A-bezoeker in 7 dagen</b></div></div>
+    <div class="flow"><h4>2 · Tool-kopers — belangrijkste flow</h4><div class="trigger">TRIGGER: AANKOOP TOOL</div><ol><li>Direct levering · Dag 2 verdieping · Dag 5 getuigenis · Dag 9 de brug · Dag 14 trainingsaanbod + 3 mnd Challenge gratis</li></ol><div class="doel">Doel: <b>tool → training in 14 dagen</b></div></div>
+    <div class="flow"><h4>3 · Challenge-deelnemers</h4><div class="trigger">TRIGGER: AANMELDING RONDE</div><ol><li>Pre-mail · dagelijkse recap ma–vr · za recap · di de keuze (onderhoud €25 of training) · vr deadline</li></ol><div class="doel">Doel: <b>deelnemer → onderhoud of training in 10 dagen</b></div></div>
+    <div class="flow"><h4>4 · Trainingsklanten — onboarding + upsell</h4><div class="trigger">TRIGGER: AANKOOP TRAINING</div><ol><li>Direct onboarding (Huddle/Discord/Q&amp;A/Challenge activeren) · wk 2 check-in · wk 4 voortgang · wk 8 1:1-upsell</li></ol><div class="doel">Doel: <b>afmaken (vs de 87%!) + 1:1-instroom</b></div></div>
+    <div class="flow"><h4>5 · Verlaten checkout + win-back</h4><div class="trigger">TRIGGER: CHECKOUT NIET AFGEROND / 14+ DGN INACTIEF</div><ol><li>Checkout: 1u · 24u · 72u. Win-back: 30/60/90 dagen — "je stoel staat klaar" (mensen pauzeren, ze vertrekken niet)</li></ol><div class="doel">Doel: <b>10–15% alsnog binnen</b></div></div>
+
+    <h3>Conversie-benchmarks (huidig → target)</h3>
+    <table>
+      <tr><th>Stap</th><th>Huidig</th><th>Target</th></tr>
+      <tr><td>Content → profielbezoek</td><td>3–5%</td><td>6–8%</td></tr>
+      <tr><td>Profiel → link click</td><td class="oranje">≈0% (het gat!)</td><td>10–15%</td></tr>
+      <tr><td>Click → tool/Challenge-aankoop</td><td>—</td><td>5–8%</td></tr>
+      <tr><td>Challenge → training</td><td>30–40%</td><td>45–55%</td></tr>
+      <tr><td>Training → 1:1</td><td>—</td><td>10–15%</td></tr>
+      <tr><td>3-maands retentie onderhoud</td><td>—</td><td>R 65% · J 50% · S 70%</td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- ============ 11 CONTENT CALENDAR ============ -->
+<section id="s11">
+  <div class="wrap">
+    <div class="sec-label">11 — Content Calendar</div>
+    <h2>Het Wekelijkse Ritme (vanaf 3 augustus)</h2>
+    <table>
+      <tr><th>Dag</th><th>07:00–08:00</th><th>19:00–20:00</th><th>YouTube</th><th>Live delivery</th></tr>
+      <tr><td class="b">Ma</td><td>PL post</td><td>B&amp;L post</td><td>—</td><td>Avond: Q&amp;A PL (klanten)</td></tr>
+      <tr><td class="b">Di</td><td>PL post</td><td>B&amp;L post</td><td class="oranje">Longform PL</td><td>1:1 sessies (blokdag)</td></tr>
+      <tr><td class="b">Wo</td><td>PL post</td><td>B&amp;L post</td><td>—</td><td>Gratis Q&amp;A (community)</td></tr>
+      <tr><td class="b">Do</td><td>PL post</td><td>B&amp;L post</td><td class="oranje">Longform B&amp;L</td><td>Q&amp;A B&amp;L (klanten) · 1:1 blokdag</td></tr>
+      <tr><td class="b">Vr</td><td>PL post</td><td>B&amp;L post</td><td>—</td><td>Batchdag: opnemen volgende week</td></tr>
+      <tr><td class="b">Za</td><td colspan="2">I.M.P.A.C.T. snippet (4 platforms)</td><td class="oranje">Zelfde snippet als Short</td><td>—</td></tr>
+      <tr><td class="b">Zo</td><td colspan="2">—</td><td class="oranje">I.M.P.A.C.T. Service (upload)</td><td>Wekelijkse analyse (15 min)</td></tr>
+    </table>
+    <p class="intro" style="font-size:13px;">= 10 unieke posts + 1 snippet + 3 YouTube-uploads → <b>48 plaatsingen/week</b> over IG, FB, TikTok, LinkedIn en YouTube. Rolverdeling: Des neemt op (1 batchdag) · Akoesha plant in + stories + community · Claude schrijft scripts/captions, repurposet en analyseert. Regel: altijd 2 weken buffer.</p>
+
+    <h3>Maandritme &amp; Challenge-kalender</h3>
+    <table>
+      <tr><th>Moment</th><th>Wat</th></tr>
+      <tr><td class="b">Zo 2 aug</td><td>DOOP-POST — comeback-moment (geen verkoop, puur verhaal)</td></tr>
+      <tr><td class="b">Ma 3 aug</td><td>Content-machine aan + testmaand start (hook/angle-analyse wekelijks)</td></tr>
+      <tr><td class="b">Zo 30 aug</td><td>Augustus-Rapport: winnende hooks/angles → contentrecept september</td></tr>
+      <tr><td class="b">Challenge-rondes</td><td>31 aug–4 sep · 5–9 okt · 2–6 nov · 30 nov–4 dec (aanmelddeadline steeds de vrijdag ervoor)</td></tr>
+      <tr><td class="b">Wk vóór elke ronde</td><td>Content buigt naar Challenge-promo (bewezen: Challenge-content haalde 85K views)</td></tr>
+      <tr><td class="b">1e zondag/mnd</td><td>Maand-dashboard + bijsturen vóór de nieuwe ronde</td></tr>
+      <tr><td class="b">Seizoenspiek</td><td>Nov–dec = jouw bewezen virale window (1,2M views in 2025) → ronde 4 + eindejaarscampagne maximaal laden</td></tr>
+    </table>
+
+    <h3>Contentmix per week (verdeling over angles)</h3>
+    <table>
+      <tr><th>Slot</th><th>Mix</th></tr>
+      <tr><td>5x PL (ochtend)</td><td>2x confronterend statement · 1x cultureel/identiteit · 1x persoonlijk verhaal · 1x permission/poëtisch</td></tr>
+      <tr><td>5x B&amp;L (avond)</td><td>2x harde waarheid/anti-cursus · 1x framework/lijst · 1x transformatie-case · 1x structuur-boven-grinden</td></tr>
+      <tr><td>YouTube longform</td><td>Di: PL deep-dive (Sandra kijkt long-form!) · Do: B&amp;L mentor-video (Jayda) · Zo: I.M.P.A.C.T.</td></tr>
+      <tr><td>Stories (Akoesha, 2–3/dag)</td><td>BTS · polls/vragen · getuigenissen · Q&amp;A-reminders · Challenge-countdowns</td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- ============ 12 TRACKERS ============ -->
+<section id="s12">
+  <div class="wrap">
+    <div class="sec-label">12 — Trackers &amp; Meetplan</div>
+    <h2>Alles Wat Je Meet, Vanaf Dag 1</h2>
+    <p class="intro">De keten <b>post → klik → funnel → verkoop</b> moet op elke stap een cijfer opleveren. Zes trackers dekken alles; de eerste twee zijn dagelijks/wekelijks, de rest maandelijks.</p>
+
+    <table>
+      <tr><th>Tracker</th><th>Meet</th><th>Frequentie</th><th>Kernvelden</th></tr>
+      <tr><td class="b">1. Content Tracker</td><td>Elke post</td><td>Na publicatie + 48u + 7 dgn</td><td>Datum, tijd, platform, pijler (PL/B&amp;L), hook-type, angle, views, likes, comments, saves, shares, bio-kliks</td></tr>
+      <tr><td class="b">2. Funnel Tracker</td><td>De keten</td><td>Wekelijks (zondag)</td><td>Bereik → profielbezoek (≥3%) → link clicks → tool/Challenge-sales → training-sales, per platform via UTM</td></tr>
+      <tr><td class="b">3. Email Tracker</td><td>De 5 flows</td><td>Wekelijks</td><td>Per flow: verzonden, open rate (doel 45%+), CTR (10%+), conversie, omzet</td></tr>
+      <tr><td class="b">4. Community Tracker</td><td>Discord + WhatsApp</td><td>Maandelijks</td><td>Leden, actief%, Q&amp;A-opkomst, Challenge-opkomst, 30-dgn retentie (doel 70%), churn onderhoud</td></tr>
+      <tr><td class="b">5. Financieel Tracker</td><td>Geld</td><td>Maandelijks</td><td>Omzet per product vs target (€102K-pad), btw-reserve, kosten, CAC, klantwaarde</td></tr>
+      <tr><td class="b">6. Concurrentie Tracker</td><td>24 spelers</td><td>Per kwartaal</td><td>Volgers, aanbod, prijzen, actieve ads, opvallende campagnes</td></tr>
+    </table>
+
+    <h3>Hook-taxonomie voor de Content Tracker (10 types)</h3>
+    <p class="intro" style="font-size:13px;">Herkenning · Confrontatie · Bewijs/getuigenis · Vraag · Statistiek · Autoriteit · Emotie/poëtisch · Community · Urgentie · Des Persoonlijk. Eerdere data-indicatie: <b>"Des Persoonlijk" presteert het best, "Community" het slechtst</b> — augustus valideert dit met echte cijfers.</p>
+
+    <h3>Beslisregels (geen discussie, gewoon doen)</h3>
+    <table>
+      <tr><th>Signaal</th><th>Regel</th></tr>
+      <tr><td class="oranje">SCALE</td><td>Hook/angle scoort &gt;2x gemiddelde op bio-kliks of saves → volgende batch: meer van dit type</td></tr>
+      <tr><td>TEST</td><td>Rond het gemiddelde → nieuwe variant proberen (andere formule, zelfde angle)</td></tr>
+      <tr><td class="b" style="color:#c00;">KILL</td><td>2 weken onder gemiddelde → type vervalt voor die pijler</td></tr>
+    </table>
+
+    <h3>Het wekelijkse meetritueel (zondag, 30 min totaal)</h3>
+    <div class="stap"><div class="nr">1</div><div><p><b>15 min:</b> platform-analytics noteren (IG, TikTok, LinkedIn, FB, YT Studio) + Linktree-kliks per link.</p></div></div>
+    <div class="stap"><div class="nr">2</div><div><p><b>10 min:</b> Content Tracker bijwerken (of Apify-export naar Claude sturen — ik vul en analyseer).</p></div></div>
+    <div class="stap"><div class="nr">3</div><div><p><b>5 min:</b> mijn wekelijkse analyse lezen: winnaars, verliezers, aanpassing volgende week.</p></div></div>
+    <p class="intro" style="font-size:13px;">Plus: "Waar ken je 360! van?"-vraag in elke checkout (vangt wat tracking mist) en het maand-dashboard elke eerste zondag. Bestaande tracker-bestanden in 09_Trackers worden hierop aangepast (oude ads-velden vervallen tot 2027).</p>
+  </div>
+</section>
+
+<!-- ============ 13 AUDIT ============ -->
+<section id="s13">
+  <div class="wrap">
+    <div class="sec-label">13 — Strategie-Audit</div>
+    <h2>De Vijf Kwetsbaarheden — En Hun Status</h2>
+    <p class="intro">Uit de forensische audit (maart 2026). Kernbevinding toen: <b>360! is een éénmans-operatie — valt de founder weg, stopt alles</b> (bewezen door de offline-periode: −99% views). Geen rebrand nodig; wél operationele excellentie. Status per juli 2026:</p>
+    <table>
+      <tr><th>Kwetsbaarheid</th><th>Risico</th><th>Mitigatie</th><th>Status</th></tr>
+      <tr><td class="b">1. Founder dependency</td><td>Alles stopt zonder Des</td><td>Akoesha (planning/stories), co-facilitators (Nisha), SOP's, batching</td><td class="oranje">DEELS — Akoesha start juli; facilitators nog open</td></tr>
+      <tr><td class="b">2. Content sustainability</td><td>Burn-out-pad: alles zelf maken</td><td>1 batchdag/wk + repurpose door Claude + inplannen door Akoesha</td><td class="oranje">OPGELOST IN ONTWERP — juli bewijst het</td></tr>
+      <tr><td class="b">3. Community-schaal</td><td>8–10 actieven, intimiteit als plafond</td><td>Tiers (gratis/klant/1:1), Challenge-cohorten, onderhoud-membership</td><td class="oranje">NIEUWE STRUCTUUR STAAT — vullen vanaf aug</td></tr>
+      <tr><td class="b">4. Conversie-ambiguïteit</td><td>51 clicks op 2,68M views</td><td>CTA-systeem, Linktree+UTM, 5 email flows, funnels per ICP</td><td class="oranje">DIT DOCUMENT — bouwen in juli (actielijst)</td></tr>
+      <tr><td class="b">5. Slapende platforms</td><td>Versnippering</td><td>Focus: IG+FB+TikTok+LinkedIn+YouTube actief; X/Threads secundair via repurpose</td><td class="oranje">BESLOTEN in contentritme</td></tr>
+    </table>
+    <h3>Lange termijn (2027+)</h3>
+    <p class="intro">Trademark 360! + pilaarnamen · facilitator-certificering (nieuw omzetkanaal) · boek/e-book/meditaties/retreats/B2B · membership-tiers verder uitbouwen · ambassadeursprogramma met revenue share (Danisha, Cherry als eerste kandidaten).</p>
+  </div>
+</section>
+
+<!-- ============ 14 BESLIS-TOOL ============ -->
+<section id="s14">
+  <div class="wrap">
+    <div class="sec-label">14 — Beslis-Tool</div>
+    <h2>Genomen Besluiten &amp; Open Keuzes</h2>
+    <h3>Al besloten (vastgelegd)</h3>
+    <table>
+      <tr><th>Besluit</th><th>Keuze</th><th>Datum</th></tr>
+      <tr><td>Doelgroep</td><td>Pivot naar (startende) ondernemers</td><td>31-05-2026</td></tr>
+      <tr><td>Slogan</td><td>"Reinvent Yourself"</td><td>mei 2026</td></tr>
+      <tr><td>Offer ladder &amp; prijzen</td><td>PL €495 · B&amp;L €1.495 · 1:1 €1.995/€3.995 · Challenge €150 + €25/mnd · tools €50–100</td><td>05-07-2026</td></tr>
+      <tr><td>1:1 vorm</td><td>12 weken · wekelijkse sessie 60–90 min · WhatsApp-groep 24/7</td><td>05-07-2026</td></tr>
+      <tr><td>Challenge-bundel</td><td>3 maanden gratis bij elke training of 1:1</td><td>05-07-2026</td></tr>
+      <tr><td>Launch</td><td>Doop-post zo 2 aug · live ma 3 aug · posttijden 07–08 en 19–20 uur</td><td>05-07-2026</td></tr>
+      <tr><td>I.M.P.A.C.T. Service</td><td>Reguliere YouTube-upload (batchbaar), za snippet + YT Short</td><td>05-07-2026</td></tr>
+      <tr><td>Team</td><td>Akoesha: content inplannen + losse stories/posts</td><td>05-07-2026</td></tr>
+      <tr><td>Betaalplan</td><td>B&amp;L in 3 termijnen (voorstel: training 3× €525, 1:1 3× €1.365 — lichte opslag, te bevestigen)</td><td>05-07-2026</td></tr>
+      <tr><td>Challenge gratis-periode</td><td>Gaat in bij de eerstvolgende ronde ná aankoop — klant mist nooit waarde</td><td>05-07-2026</td></tr>
+      <tr><td>Gratis Q&amp;A in Challenge-weken</td><td>Blijft apart doorgaan (Challenge-weken dus extra strak plannen)</td><td>05-07-2026</td></tr>
+      <tr><td>Fit Club</td><td>Geparkeerd tot 2027 — focus op de kern-launch</td><td>05-07-2026</td></tr>
+      <tr><td>1:1 capaciteit</td><td>Max. 3 nieuwe starts per maand (agenda + schaarste)</td><td>05-07-2026</td></tr>
+      <tr><td>Workspace</td><td>Dubbelingen gearchiveerd naar _Archief — uitgevoerd, niets weggegooid</td><td>05-07-2026</td></tr>
+    </table>
+
+    <div class="note">
+      <div class="t">ALLE BESLISSINGEN GENOMEN — 5 JULI 2026</div>
+      Alle zes openstaande keuzes zijn op 5 juli beslist en hierboven vastgelegd. Implementatie zit in de actielijst van sectie 15: betaalplan aanmaken in de checkout, Challenge-activatie instellen op "eerstvolgende ronde na aankoop" (Discord-rol per ronde toekennen), en de agenda beschermen met max. 3 nieuwe 1:1 starts per maand. Nieuwe beslissingen die opkomen: toevoegen aan deze tabel zodat dit hét besluitenregister blijft.
+    </div>
+  </div>
+</section>
+
+<!-- ============ 15 COMEBACK & LAUNCHPLAN ============ -->
+<section id="s15">
+  <div class="wrap">
+    <div class="sec-label">15 — Comeback &amp; Launchplan</div>
+    <h2>Waar Alles Samenkomt</h2>
+    <div class="blauwblok">
+      <h3>Het verhaal</h3>
+      Zondag 2 augustus: gedoopt in de oceaan op Curaçao, door je moeder. Maandag 3 augustus: live. Het comeback-verhaal ís de positionering — Reinvent Yourself, letterlijk voorgedaan. Van 3 maanden stilte (−99% views) naar een machine die draait op systemen in plaats van op Des alleen.
+    </div>
+    <div class="kpis">
+      <div class="kpi"><div class="n">2 aug</div><div class="l">Doop-post (verhaal, geen verkoop)</div></div>
+      <div class="kpi"><div class="n">3 aug</div><div class="l">Live: 48 plaatsingen/week</div></div>
+      <div class="kpi"><div class="n">31 aug</div><div class="l">Challenge-ronde 1 (target 15)</div></div>
+      <div class="kpi"><div class="n o">€102.088</div><div class="l">Omzettarget sept–dec incl. btw</div></div>
+    </div>
+
+    <h3>Actielijst juli — vier weken tot de doop</h3>
+    <div class="week"><h3>Week 1 <span>· 6–12 juli</span> — Fundament</h3>
+      <label class="chk"><input type="checkbox" data-k="m1a"><span>Huddle: beide trainingen + betaallinks, incl. betaalplan B&amp;L (3 termijnen) en 1:1-limiet (max 3 starts/mnd)</span></label>
+      <label class="chk"><input type="checkbox" data-k="m1b"><span>Discord herstructureren + Q&amp;A agenda + Zoom-links</span></label>
+      <label class="chk"><input type="checkbox" data-k="m1c"><span>Akoesha onboarden (rol, toegangen, 2–3 stories/dag) + WhatsApp 1:1-groepen aanmaken</span></label>
+      <label class="chk"><input type="checkbox" data-k="m1d"><span>Challenge-activatie technisch instellen: gratis periode start bij eerstvolgende ronde na aankoop (Discord-rol per ronde)</span></label>
+    </div>
+    <div class="week"><h3>Week 2 <span>· 13–19 juli</span> — Producten, funnels &amp; meten</h3>
+      <label class="chk"><input type="checkbox" data-k="m2a"><span>Trainingsvideo's compleet in Huddle · 4 tools productieklaar (Finance Sheet = privé)</span></label>
+      <label class="chk"><input type="checkbox" data-k="m2b"><span>Linktree + UTM's · salespages (12 wk, WhatsApp, 3 mnd Challenge gratis benoemen)</span></label>
+      <label class="chk"><input type="checkbox" data-k="m2c"><span>5 email flows bouwen in Systeme.io (Claude schrijft de copy) · elke checkout vangt een emailadres</span></label>
+      <label class="chk"><input type="checkbox" data-k="m2d"><span>Content Tracker + hook-taxonomie klaarzetten (sectie 12)</span></label>
+    </div>
+    <div class="week"><h3>Week 3 <span>· 20–26 juli</span> — Content batch 1</h3>
+      <label class="chk"><input type="checkbox" data-k="m3a"><span>20 posts opnemen, verdeeld over de hook-types (sectie 11-mix) + 4 YouTube longforms</span></label>
+      <label class="chk"><input type="checkbox" data-k="m3b"><span>Eerste 2 I.M.P.A.C.T. Services opnemen + snippets knippen</span></label>
+      <label class="chk"><input type="checkbox" data-k="m3c"><span>Doop-content plannen: wie filmt, welke shots, caption (Story-lead, geen CTA)</span></label>
+    </div>
+    <div class="week"><h3>Week 4 <span>· 27 jul–2 aug</span> — Generale repetitie</h3>
+      <label class="chk"><input type="checkbox" data-k="m4a"><span>Akoesha plant week 1 volledig in · testkoop van élk product (betaling → toegang → flow start)</span></label>
+      <label class="chk"><input type="checkbox" data-k="m4b"><span>Bio's + Linktree overal geüpdatet · UTM-test: elke link meetbaar</span></label>
+      <label class="chk"><input type="checkbox" data-k="m4c"><span>Zondag 2 aug: doop-video + foto 🌊</span></label>
+    </div>
+
+    <h3>Augustus = testmaand → september = oogsten</h3>
+    <p class="intro">Elke zondag analyseer ik alle posts op hook-type, angle en bio-kliks (kliks wegen het zwaarst). Winnaars krijgen meer plek, verliezers vallen af. <b>Zondag 30 augustus: het Augustus-Rapport</b> — het contentrecept voor september, precies vóór Challenge-ronde 1 en het verkoopwindow. Nov–dec (jouw bewezen virale seizoen) wordt maximaal geladen met ronde 4 + eindejaarscampagne.</p>
+
+    <h3>Targets — wat "gelukt" betekent</h3>
+    <table>
+      <tr><th>Periode</th><th>Doel</th></tr>
+      <tr><td class="b">Augustus</td><td>Ritme bewijzen (48/wk, 4 weken vol) · hook-winnaars kennen · emaillijst starten · 15 deelnemers ronde 1</td></tr>
+      <tr><td class="b">Sept–dec</td><td>60 Challenge-deelnemers · 30 PL · 30 B&amp;L · 5 + 5 1:1 · 50 tools = <b>€102.088 incl. btw</b> (±€84.370 ex) · B&amp;L = 63,5% van omzet → avondposts zijn je belangrijkste verkopers</td></tr>
+      <tr><td class="b">Bonus</td><td>Onderhoud-abonnementen (€25/mnd) bouwen terugkerende omzet bovenop het target</td></tr>
+    </table>
+    <p class="intro" style="font-size:13px;">Volledige details (delivery-ritme, capaciteitscheck 1:1, resterende aandachtspunten): zie 01_Strategie/360_Launch_Actieplan_Aug-Dec_2026.html — het operationele zusje van dit masterdocument.</p>
+  </div>
+</section>
+
+<script>
+// Checklist voortgang
+document.querySelectorAll('.chk input').forEach(cb=>{
+  const k='360master_'+cb.dataset.k;
+  try{ if(localStorage.getItem(k)==='1') cb.checked=true; }catch(e){}
+  cb.addEventListener('change',()=>{ try{ localStorage.setItem(k, cb.checked?'1':'0'); }catch(e){} });
+});
+// Beslis-tool
+document.querySelectorAll('.beslis input[type=radio]').forEach(r=>{
+  const k='360master_beslis_'+r.name;
+  try{ if(localStorage.getItem(k)===r.value) r.checked=true; }catch(e){}
+  r.addEventListener('change',()=>{ try{ localStorage.setItem(k,r.value); }catch(e){} });
+});
+function kopieerKeuzes(){
+  const vragen={b1:'Betaalplan B&L',b2:'Challenge gratis-periode',b3:'Workspace opschonen',b4:'Gratis Q&A in Challenge-weken',b5:'Fit Club',b6:'Max 1:1 starts/mnd'};
+  let out='== MIJN KEUZES — 360! Master Beslis-tool ==\n';
+  for(const [n,lab] of Object.entries(vragen)){
+    const sel=document.querySelector('input[name='+n+']:checked');
+    out+=lab+': '+(sel?sel.value:'— nog niet gekozen —')+'\n';
+  }
+  navigator.clipboard.writeText(out).then(()=>{ document.getElementById('kopieOk').style.display='inline'; });
+}
+// Chart 1: maandviews FB/IG
+const mnd=['jan25','feb','mrt','apr','mei','jun','jul','aug','sep','okt','nov','dec','jan26','feb26','mrt26','apr26'];
+new Chart(document.getElementById('viewsChart'),{
+  type:'line',
+  data:{labels:mnd,datasets:[
+    {label:'Facebook views',data:[10236,83891,15528,7149,11698,3346,43510,33973,121609,101460,455273,777581,449792,173516,18306,2104],borderColor:'#0D3EA2',backgroundColor:'rgba(13,62,162,.08)',fill:true,tension:.35},
+    {label:'Instagram views',data:[0,0,0,0,0,0,0,26874,89002,59258,62527,77485,46952,10121,1228,488],borderColor:'#FB5205',backgroundColor:'rgba(251,82,5,.08)',fill:true,tension:.35}
+  ]},
+  options:{plugins:{legend:{labels:{font:{family:'Open Sans',size:11}}},title:{display:true,text:'Maandviews jan 2025 – apr 2026 — nov-dec spike + offline-dip',font:{family:'League Spartan',size:14,weight:'700'},color:'#0D3EA2'}},scales:{y:{ticks:{callback:v=>v>=1000?(v/1000)+'K':v}}}}
+});
+// Chart 2: omzetmix
+new Chart(document.getElementById('omzetChart'),{
+  type:'doughnut',
+  data:{labels:['B&L Training €44.850','1:1 B&L €19.975','PL Training €14.850','1:1 PL €9.975','Challenge €9.000','Tools €3.438'],
+    datasets:[{data:[44850,19975,14850,9975,9000,3438],backgroundColor:['#0D3EA2','#3A63C4','#FB5205','#FC7A3D','#0A0A0A','#9AA6C4'],borderWidth:2,borderColor:'#fff'}]},
+  options:{plugins:{legend:{position:'bottom',labels:{font:{family:'Open Sans',size:10.5},boxWidth:11,padding:8}},title:{display:true,text:'Omzetmix targets sept–dec (incl. btw)',font:{family:'League Spartan',size:13,weight:'700'},color:'#0D3EA2'}},cutout:'55%'}
+});
+</script>
+
+<footer>
+  <div class="logo">360<span>!</span></div>
+  <p>Reinvent Yourself · Masterdocument Strategie, Analyse &amp; Actie 2026 · Des Balentien</p>
+</footer>
+</main>
+</div>
+</body>
+</html>
